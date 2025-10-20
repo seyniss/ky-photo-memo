@@ -1,19 +1,19 @@
-import "./App.scss";
-import { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import AuthPanel from "./components/AuthPanel";
-import Landing from "./pages/Landing";
-import Header from "./components/Header";
-import ProtectRoute from "./components/ProtectRoute";
-import UserDashboard from "./components/userDashboard";
-import AdminDashboard from "./components/adminDashboard";
-import api from "./api/client";
+
+import './App.scss'
+import { useState, useEffect } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import AuthPanel from './components/AuthPanel'
+import Landing from './pages/Landing'
+import Header from './components/Header'
+import ProtectRoute from './components/ProtectRoute'
+import UserDashboard from './pages/user/userDashboard'
+import AdminDashboard from './pages/admin/adminDashboard'
 import {
   fetchMe as apiFetchMe,
   logout as apiLogout,
   saveAuthToStorage,
-  clearAuthStorage,
-} from "./api/client";
+  clearAuthStorage
+} from "./api/client"
 function App() {
   const [user, setUser] = useState(() => {
     const raw = localStorage.getItem("user");
@@ -24,48 +24,47 @@ function App() {
   const showHeader = isAuthed && !hideOn.has(location.pathname)
 
 
-
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
-  const [me, setMe] = useState(null);
-  const isAuthed = !!token;
-
   const handleAuthed = async ({ user, token }) => {
     try {
-      setUser(user);
-      setToken(token ?? null);
-      saveAuthToStorage({ user, token });
-      handleFetchMe();
+
+      setUser(user)
+      setToken(token ?? null)
+      saveAuthToStorage({ user, token })
+      handleFetchMe()
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+
+  }
 
   const handleLogout = async () => {
     try {
-      await apiLogout();
+      await apiLogout()
     } catch (error) {
-      console.error(error);
+
     } finally {
-      setUser(null);
-      setToken(null);
-      setMe(null);
-      clearAuthStorage();
+      setUser(null)
+      setToken(null)
+      setMe(null)
+      clearAuthStorage()
     }
-  };
+
+  }
 
   const handleFetchMe = async () => {
     try {
-      const { user } = await apiFetchMe();
-      setMe(user);
+      const { user } = await apiFetchMe()
+      setMe(user)
+
     } catch (error) {
-      setMe({ error: "내정보 조회 실패" });
-      console.error(error);
+      setMe({ error: '내 정보 조회 실패' })
+      console.error(error)
     }
   };
 
   useEffect(() => {
-    if (isAuthed) handleFetchMe();
-  }, [isAuthed]);
+    if (isAuthed) handleFetchMe()
+  }, [isAuthed])
 
   return (
     <div className="page">
@@ -77,39 +76,38 @@ function App() {
       />}
 
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path='/' element={<Landing />} />
         {/* 로그인 회원가입 */}
         <Route
-          path="/admin/login"
-          element={
-            <AuthPanel
-              isAuthed={isAuthed}
-              user={user}
-              me={me}
-              onFetchMe={handleFetchMe}
-              onLogout={handleLogout}
-              onAuthed={handleAuthed}
-              requiredRole="admin"
-            />
-          }
+          path='/admin/login'
+          element={<AuthPanel
+            isAuthed={isAuthed}
+            user={user}
+            me={me}
+            onFetchMe={handleFetchMe}
+            onLogout={handleLogout}
+            onAuthed={handleAuthed}
+            requiredRole="admin"
+          />}
         />
         {/* 사용자 보호구역 */}
         <Route
-          path="/user"
+          path='/user'
           element={
             <ProtectRoute
               user={user}
               isAuthed={isAuthed}
-              redirect="/admin/login"
+              redirect='/admin/login'
             />
           }
         >
+          
           <Route index element={<Navigate to="/user/dashboard" replace />} />
-          <Route path="dashboard" element={<UserDashboard />} />
+          <Route path='dashboard' element={<UserDashboard />} />
         </Route>
-        {/* 관리자 보호구역*/}
+        {/* 관리자 보호구역 */}
         <Route
-          path="/admin"
+          path='/admin'
           element={
             <ProtectRoute
               isAuthed={isAuthed}
@@ -118,10 +116,10 @@ function App() {
             />
           }
         >
-          <Route index element={<Navigate to="/admin/dashboard" replace />} />
-          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route index element={<Navigate to="/admin/dashboard" replace/>}/>
+          <Route path='dashboard' element={<AdminDashboard/>}/>
         </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path='*' element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
