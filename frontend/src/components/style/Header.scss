@@ -1,0 +1,29 @@
+.site-header{
+    position: sticky;
+    top:0;
+    z-index:10;
+    .inner{
+        display:flex;
+        align-items: center;
+        justify-content: space-between;
+        //두개로 나뉜 영역을 떨어뜨림
+
+        h1.logo{
+            font-weight: 700;
+            font-size: 3.4rem;
+            color:var(--primary);
+        }
+
+        .auth-area{
+            .welcom{
+                display:inline-block;
+                font-size: 1.4rem;
+                color:var(--muted)
+            }
+            .btn{
+                margin-left:1rem;
+
+            }
+        }
+    }
+}
