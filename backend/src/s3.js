@@ -12,7 +12,7 @@ const required = [
     "S3_BUCKET",
 ]
 
-const missing = required.fillter(k => !process.env[k])
+const missing = required.filter(k => !process.env[k])
 
 if (missing.length) {
     console.error('[S3 ENV Missing]', missing)
