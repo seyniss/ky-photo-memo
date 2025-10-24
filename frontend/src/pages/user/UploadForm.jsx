@@ -1,11 +1,16 @@
 import React from 'react'
 import "./style/UploadForm.scss"
-const UploadForm = () => {
+const UploadForm = ({ onClose, onPanelClick }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+  }
   return (
     <section className='am-backdrop'>
       <form
         action=""
         className='am-panel Upload-form'
+        onSubmit={handleSubmit}
+        onClick={onPanelClick}
       >
         <header>
           <h2>파일 업로드</h2>
@@ -38,8 +43,14 @@ const UploadForm = () => {
           </div>
         </div>
         <div className="actions">
-          <button className="btn ghost">취소</button>
-          <button className="btn primary">업로드</button>
+          <button
+            className="btn ghost"
+            type='button'
+            onClick={onClose}
+          >취소</button>
+          <button
+            className="btn primary"
+          >업로드</button>
         </div>
       </form>
 

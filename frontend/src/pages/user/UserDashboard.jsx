@@ -6,6 +6,11 @@ const UserDashboard = () => {
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
 
+  //팝업 배경 클릭 닫기
+  const handleBackdropClick = (e) => {
+    setOpen(false)
+  }
+
   return (
     <section>
       <div className="inner">
@@ -23,9 +28,19 @@ const UserDashboard = () => {
       </div>
       <div className="inner">
         {open && (
-          <UploadForm open={open} onClose={()=> setOpen(false)} />
+          <div
+            className='popup-backdrop'
+            onClick={handleBackdropClick}
+          >
+            <UploadForm
+              open={open}
+              onClose={() => setOpen(false)}
+              onPanelClick={(e) => e.stopPropagation()}
+            />
+          </div>
         )}
         <FileList />
+
       </div>
     </section>
   )
